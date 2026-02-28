@@ -1,5 +1,6 @@
 ﻿namespace Slot_Machine
 {
+
     internal class Program
     {
         /*
@@ -19,6 +20,7 @@
          * then dumped into the player’s money total. As for the mechanism to determine what the wheels produce 
          * per spin, use a random number generating function.
          */
+        enum Mode { CenterLine, HorizonalLines, VerticalLines, Diagnoals, Unkown };
 
         private const int MIN = 1;
         private const int MAX = 9;
@@ -35,46 +37,28 @@
                 Console.Clear();
                 WriteHeader();
                 WriteSlotMachine(arr);
+                Spin(arr, random);
 
-                Console.WriteLine($"You're balance is: {balance}");
-                Console.Write("Place a bet: ");
-
-                string? s = Console.ReadLine();
-                if (s == null || !int.TryParse(s, out _))
+                int bet = PlaceBet(balance);
+                if (bet < 0)
                     continue;
-
-                int bet = int.Parse(s);
                 balance -= bet;
 
-                // ---------------------------------------------
+                Mode mode = PickMode();
+                if (mode == Mode.Unkown)
+                    continue;
 
-                Spin(arr, random);
+                // ---------------------------------------------
 
                 Console.Clear();
                 WriteHeader();
                 WriteSlotMachine(arr, true);
 
-                if (CheckRow(arr, 1))
-                {
-                    int won = bet * WIN_FACTOR;
-                    Console.WriteLine("You won {0}!", won);
-                    balance += won;
-                }
-                else
-                    Console.WriteLine("You lost.");
+                balance = CheckResult(arr, mode, balance, bet);
 
-                Console.WriteLine("Press escape to exit");
-                Console.WriteLine("Press any other key to continue");
-
-                ConsoleKey key = Console.ReadKey().Key;
-                if (key == ConsoleKey.Escape)
+                if (UserWantsToExit())
                     break;
             }
-        }
-
-        private static bool CheckRow(int[,] arr, int row)
-        {
-            return arr[row, 0] == arr[row, 1] && arr[row, 0] == arr[row, 2];
         }
 
         private static void WriteHeader()
@@ -104,6 +88,81 @@
             for (int x = 0; x < arr.GetLength(1); ++x)
                 for (int y = 0; y < arr.GetLength(0); ++y)
                     arr[x, y] = random.Next(MIN, MAX);
+        }
+
+        private static int PlaceBet(int balance)
+        {
+            Console.WriteLine();
+            Console.WriteLine($"You're balance is: {balance}");
+            Console.Write("Place a bet: ");
+
+            string? s = Console.ReadLine();
+            if (s == null || !int.TryParse(s, out _))
+                return -1;
+
+            int bet = int.Parse(s);
+            if (bet < 0)
+                return -1;
+            return bet;
+        }
+
+        private static Mode PickMode()
+        {
+            Console.WriteLine();
+            Console.WriteLine("What do you want to play?");
+            Console.WriteLine("1. The center line");
+            Console.WriteLine("2. All three horizonal line");
+            Console.WriteLine("3. All veritical lines");
+            Console.WriteLine("4. Diagnoals");
+
+            Mode mode = Mode.Unkown;
+            while (mode == Mode.Unkown)
+                mode = Console.ReadKey().Key switch
+                {                    
+                    ConsoleKey.D1 or ConsoleKey.NumPad1 => Mode.CenterLine,
+                    ConsoleKey.D2 or ConsoleKey.NumPad2 => Mode.HorizonalLines,
+                    ConsoleKey.D3 or ConsoleKey.NumPad3 => Mode.VerticalLines,
+                    ConsoleKey.D4 or ConsoleKey.NumPad4 => Mode.Diagnoals,
+                    _ => Mode.Unkown,
+                };
+            return mode;
+        }
+
+        private static int CheckResult(int[,] arr, Mode mode, int balance, int bet)
+        {
+            Console.WriteLine();
+            switch (mode)
+            {
+                case Mode.CenterLine:
+                    if (CheckRow(arr, 1))
+                    {
+                        int won = bet * WIN_FACTOR;
+                        Console.WriteLine("You won {0} on the center line!", won);
+                        balance += won;
+                    }
+                    else
+                        Console.WriteLine("You lost on the center line.");
+                    return balance;
+                case Mode.HorizonalLines:
+                case Mode.VerticalLines:
+                case Mode.Diagnoals:
+                default:
+                    return balance;
+            }
+        }
+
+        private static bool CheckRow(int[,] arr, int row)
+        {
+            return arr[row, 0] == arr[row, 1] && arr[row, 0] == arr[row, 2];
+        }
+
+        private static bool UserWantsToExit()
+        {
+            Console.WriteLine("Press escape to exit");
+            Console.WriteLine("Press any other key to continue");
+
+            ConsoleKey key = Console.ReadKey().Key;
+            return key == ConsoleKey.Escape;
         }
     }
 }
