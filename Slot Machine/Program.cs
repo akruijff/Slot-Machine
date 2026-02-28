@@ -33,9 +33,7 @@
             while (balance > 0)
             {
                 Console.Clear();
-                Console.WriteLine("Welkom to Slot Machine");
-                Console.WriteLine("");
-
+                WriteHeader();
                 WriteSlotMachine(arr);
 
                 Console.WriteLine($"You're balance is: {balance}");
@@ -53,12 +51,10 @@
                 Spin(arr, random);
 
                 Console.Clear();
-                Console.WriteLine("Welkom to Slot Machine");
-                Console.WriteLine("");
-
+                WriteHeader();
                 WriteSlotMachine(arr, true);
 
-                if (arr[1, 0] == arr[1, 1] && arr[1, 0] == arr[1, 2])
+                if (CheckRow(arr, 1))
                 {
                     int won = bet * WIN_FACTOR;
                     Console.WriteLine("You won {0}!", won);
@@ -76,15 +72,26 @@
             }
         }
 
+        private static bool CheckRow(int[,] arr, int row)
+        {
+            return arr[row, 0] == arr[row, 1] && arr[row, 0] == arr[row, 2];
+        }
+
+        private static void WriteHeader()
+        {
+            Console.WriteLine("Welkom to Slot Machine");
+            Console.WriteLine("");
+        }
+
         private static void WriteSlotMachine(int[,] arr, bool showContent = false)
         {
             Console.WriteLine("╔═══════╗");
-            for (int x = 0; x < arr.GetLength(1); ++x)
+            for (int y = 0; y < arr.GetLength(1); ++y)
             {
                 Console.Write("║ ");
-                for (int y = 0; y < arr.GetLength(0); ++y)
+                for (int x = 0; x < arr.GetLength(0); ++x)
                     if (showContent)
-                        Console.Write($"{arr[x, y]} ");
+                        Console.Write($"{arr[y, x]} ");
                     else
                         Console.Write("? ");
                 Console.WriteLine("║");
