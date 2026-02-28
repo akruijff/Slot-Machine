@@ -154,9 +154,11 @@
                     balance += WriteResult(arr, bet / 3, CheckColumn(arr, VERTICAL_RIGHT),  "bottom vertical line");
                     return balance;
                 case Mode.Diagnoals:
-                default:
+                    balance += WriteResult(arr, bet / 3, CheckMainDiagonal(arr), "main diagonal line");
+                    balance += WriteResult(arr, bet / 3, CheckAntiDiagonal(arr), "anti diagonal line");
                     return balance;
             }
+            return balance;
         }
 
         private static double WriteResult(int[,] arr, double bet, bool won, string line)
@@ -178,6 +180,16 @@
         private static bool CheckColumn(int[,] arr, int column)
         {
             return arr[0, column] == arr[1, column] && arr[0, column] == arr[2, column];
+        }
+
+        private static bool CheckMainDiagonal(int[,] arr)
+        {
+            return arr[0, 0] == arr[1, 1] && arr[0, 0] == arr[2, 2];
+        }
+
+        private static bool CheckAntiDiagonal(int[,] arr)
+        {
+            return arr[0, 2] == arr[1, 1] && arr[0, 2] == arr[0, 2];
         }
 
         private static bool UserWantsToExit()
