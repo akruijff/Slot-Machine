@@ -22,13 +22,20 @@
          */
         enum Mode { CenterLine, HorizonalLines, VerticalLines, Diagnoals, Unkown };
 
+        private const int HORIONTAL_TOP = 0;
+        private const int HORIONTAL_CENTER = 1;
+        private const int HORIONTAL_BOTTOM = 2;
+        private const int VERTICAL_LEFT = 0;
+        private const int VERTICAL_CENTER = 1;
+        private const int VERTICAL_RIGHT = 2;
+
         private const int MIN = 1;
         private const int MAX = 9;
         private const int WIN_FACTOR = 3;
 
         static void Main(string[] args)
         {
-            int balance = 500;
+            double balance = 500;
             int[,] arr = new int[3, 3];
             Random random = new Random();
 
@@ -39,7 +46,7 @@
                 WriteSlotMachine(arr);
                 Spin(arr, random);
 
-                int bet = PlaceBet(balance);
+                double bet = PlaceBet(balance);
                 if (bet < 0)
                     continue;
                 balance -= bet;
@@ -90,10 +97,10 @@
                     arr[x, y] = random.Next(MIN, MAX);
         }
 
-        private static int PlaceBet(int balance)
+        private static double PlaceBet(double balance)
         {
             Console.WriteLine();
-            Console.WriteLine($"You're balance is: {balance}");
+            Console.WriteLine($"You're balance is: {balance}:F2");
             Console.Write("Place a bet: ");
 
             string? s = Console.ReadLine();
@@ -128,27 +135,39 @@
             return mode;
         }
 
-        private static int CheckResult(int[,] arr, Mode mode, int balance, int bet)
+        private static double CheckResult(int[,] arr, Mode mode, double balance, double bet)
         {
             Console.WriteLine();
             switch (mode)
             {
                 case Mode.CenterLine:
-                    if (CheckRow(arr, 1))
-                    {
-                        int won = bet * WIN_FACTOR;
-                        Console.WriteLine("You won {0} on the center line!", won);
-                        balance += won;
-                    }
-                    else
-                        Console.WriteLine("You lost on the center line.");
+                    balance += WriteResult(arr, bet, CheckRow(arr, HORIONTAL_CENTER), "center line");
                     return balance;
                 case Mode.HorizonalLines:
+                    balance += WriteResult(arr, bet / 3, CheckRow(arr, HORIONTAL_TOP),    "   top horizontal line");
+                    balance += WriteResult(arr, bet / 3, CheckRow(arr, HORIONTAL_CENTER), "center horizontal line");
+                    balance += WriteResult(arr, bet / 3, CheckRow(arr, HORIONTAL_BOTTOM), "bottom horizontal line");
+                    return balance;
                 case Mode.VerticalLines:
+                    balance += WriteResult(arr, bet / 3, CheckColumn(arr, VERTICAL_LEFT),   "   top vertical line");
+                    balance += WriteResult(arr, bet / 3, CheckColumn(arr, VERTICAL_CENTER), "center vertical line");
+                    balance += WriteResult(arr, bet / 3, CheckColumn(arr, VERTICAL_RIGHT),  "bottom vertical line");
+                    return balance;
                 case Mode.Diagnoals:
                 default:
                     return balance;
             }
+        }
+
+        private static double WriteResult(int[,] arr, double bet, bool won, string line)
+        {
+            if (won)
+            {
+                Console.WriteLine($"You won on the {line}!");
+                return bet * WIN_FACTOR;
+            }
+            Console.WriteLine($"You lost on the {line}.");
+            return 0;
         }
 
         private static bool CheckRow(int[,] arr, int row)
@@ -156,8 +175,15 @@
             return arr[row, 0] == arr[row, 1] && arr[row, 0] == arr[row, 2];
         }
 
-        private static bool UserWantsToExit()
+        private static bool CheckColumn(int[,] arr, int column)
         {
+            return arr[0, column] == arr[1, column] && arr[0, column] == arr[2, column];
+        }
+
+        private static bool UserWantsToExit()
+
+        {
+            Console.WriteLine();
             Console.WriteLine("Press escape to exit");
             Console.WriteLine("Press any other key to continue");
 
