@@ -1,6 +1,5 @@
 ﻿namespace Slot_Machine
 {
-
     internal class Program
     {
         /*
@@ -20,7 +19,7 @@
          * then dumped into the player’s money total. As for the mechanism to determine what the wheels produce 
          * per spin, use a random number generating function.
          */
-        enum Mode { CenterLine, HorizonalLines, VerticalLines, Diagnoals, Unkown };
+        enum Mode { CenterLine, HorizontalLines, VerticalLines, Diagonals, Unkown };
 
         private const int HORIONTAL_TOP = 0;
         private const int HORIONTAL_CENTER = 1;
@@ -100,7 +99,7 @@
         private static double PlaceBet(double balance)
         {
             Console.WriteLine();
-            Console.WriteLine($"You're balance is: {balance}:F2");
+            Console.WriteLine($"You're balance is: {balance:F2}");
             Console.Write("Place a bet: ");
 
             string? s = Console.ReadLine();
@@ -118,18 +117,18 @@
             Console.WriteLine();
             Console.WriteLine("What do you want to play?");
             Console.WriteLine("1. The center line");
-            Console.WriteLine("2. All three horizonal line");
+            Console.WriteLine("2. All three Horizontal line");
             Console.WriteLine("3. All veritical lines");
-            Console.WriteLine("4. Diagnoals");
+            Console.WriteLine("4. Diagonals");
 
             Mode mode = Mode.Unkown;
             while (mode == Mode.Unkown)
                 mode = Console.ReadKey().Key switch
                 {                    
                     ConsoleKey.D1 or ConsoleKey.NumPad1 => Mode.CenterLine,
-                    ConsoleKey.D2 or ConsoleKey.NumPad2 => Mode.HorizonalLines,
+                    ConsoleKey.D2 or ConsoleKey.NumPad2 => Mode.HorizontalLines,
                     ConsoleKey.D3 or ConsoleKey.NumPad3 => Mode.VerticalLines,
-                    ConsoleKey.D4 or ConsoleKey.NumPad4 => Mode.Diagnoals,
+                    ConsoleKey.D4 or ConsoleKey.NumPad4 => Mode.Diagonals,
                     _ => Mode.Unkown,
                 };
             return mode;
@@ -143,19 +142,19 @@
                 case Mode.CenterLine:
                     balance += WriteResult(arr, bet, CheckRow(arr, HORIONTAL_CENTER), "center line");
                     return balance;
-                case Mode.HorizonalLines:
+                case Mode.HorizontalLines:
                     balance += WriteResult(arr, bet / 3, CheckRow(arr, HORIONTAL_TOP),    "   top horizontal line");
                     balance += WriteResult(arr, bet / 3, CheckRow(arr, HORIONTAL_CENTER), "center horizontal line");
                     balance += WriteResult(arr, bet / 3, CheckRow(arr, HORIONTAL_BOTTOM), "bottom horizontal line");
                     return balance;
                 case Mode.VerticalLines:
-                    balance += WriteResult(arr, bet / 3, CheckColumn(arr, VERTICAL_LEFT),   "   top vertical line");
+                    balance += WriteResult(arr, bet / 3, CheckColumn(arr, VERTICAL_LEFT),   "  left vertical line");
                     balance += WriteResult(arr, bet / 3, CheckColumn(arr, VERTICAL_CENTER), "center vertical line");
-                    balance += WriteResult(arr, bet / 3, CheckColumn(arr, VERTICAL_RIGHT),  "bottom vertical line");
+                    balance += WriteResult(arr, bet / 3, CheckColumn(arr, VERTICAL_RIGHT),  " right vertical line");
                     return balance;
-                case Mode.Diagnoals:
-                    balance += WriteResult(arr, bet / 3, CheckMainDiagonal(arr), "main diagonal line");
-                    balance += WriteResult(arr, bet / 3, CheckAntiDiagonal(arr), "anti diagonal line");
+                case Mode.Diagonals:
+                    balance += WriteResult(arr, bet / 2, CheckMainDiagonal(arr), "main diagonal line");
+                    balance += WriteResult(arr, bet / 2, CheckAntiDiagonal(arr), "anti diagonal line");
                     return balance;
             }
             return balance;
@@ -174,22 +173,34 @@
 
         private static bool CheckRow(int[,] arr, int row)
         {
-            return arr[row, 0] == arr[row, 1] && arr[row, 0] == arr[row, 2];
+            for (int y = 1; y < arr.GetLength(1); ++y)
+                if (arr[row, 0] != arr[row, y])
+                    return false;
+            return true;
         }
 
         private static bool CheckColumn(int[,] arr, int column)
         {
-            return arr[0, column] == arr[1, column] && arr[0, column] == arr[2, column];
+            for (int x = 1; x < arr.GetLength(1); ++x)
+                if (arr[0, column] != arr[x, column])
+                    return false;
+            return true;
         }
 
         private static bool CheckMainDiagonal(int[,] arr)
         {
-            return arr[0, 0] == arr[1, 1] && arr[0, 0] == arr[2, 2];
+            for (int i = 1; i < arr.GetLength(0); ++i)
+                if (arr[0, 0] != arr[i, i])
+                    return false;
+            return true;
         }
 
         private static bool CheckAntiDiagonal(int[,] arr)
         {
-            return arr[0, 2] == arr[1, 1] && arr[0, 2] == arr[0, 2];
+            for (int i = 1; i < arr.GetLength(0); ++i)
+                if (arr[0, arr.GetLength(0) - 1] != arr[i, arr.GetLength(0) - i - 1])
+                    return false;
+            return true;
         }
 
         private static bool UserWantsToExit()
