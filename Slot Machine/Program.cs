@@ -44,6 +44,15 @@
                     Console.WriteLine("║");
                 }
                 Console.WriteLine("╚═══════╝");
+
+                Console.WriteLine($"You're balance is: {balance}");
+                Console.Write("Place a bet: ");
+
+                string? s = Console.ReadLine();
+                if (s == null || !int.TryParse(s, out _))
+                    continue;
+
+                int bet = int.Parse(s);
             }
         }
     }
