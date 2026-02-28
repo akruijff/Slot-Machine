@@ -22,6 +22,7 @@
 
         private const int MIN = 1;
         private const int MAX = 9;
+        private const int WIN_FACTOR = 3;
 
         static void Main(string[] args)
         {
@@ -35,15 +36,7 @@
                 Console.WriteLine("Welkom to Slot Machine");
                 Console.WriteLine("");
 
-                Console.WriteLine("╔═══════╗");
-                for (int x = 0; x < arr.GetLength(1); ++x)
-                {
-                    Console.Write("║ ");
-                    for (int y = 0; y < arr.GetLength(0); ++y)
-                        Console.Write($"? ");
-                    Console.WriteLine("║");
-                }
-                Console.WriteLine("╚═══════╝");
+                WriteSlotMachine(arr);
 
                 Console.WriteLine($"You're balance is: {balance}");
                 Console.Write("Place a bet: ");
@@ -53,7 +46,57 @@
                     continue;
 
                 int bet = int.Parse(s);
+                balance -= bet;
+
+                // ---------------------------------------------
+
+                Spin(arr, random);
+
+                Console.Clear();
+                Console.WriteLine("Welkom to Slot Machine");
+                Console.WriteLine("");
+
+                WriteSlotMachine(arr, true);
+
+                if (arr[1, 0] == arr[1, 1] && arr[1, 0] == arr[1, 2])
+                {
+                    int won = bet * WIN_FACTOR;
+                    Console.WriteLine("You won {0}!", won);
+                    balance += won;
+                }
+                else
+                    Console.WriteLine("You lost.");
+
+                Console.WriteLine("Press escape to exit");
+                Console.WriteLine("Press any other key to continue");
+
+                ConsoleKey key = Console.ReadKey().Key;
+                if (key == ConsoleKey.Escape)
+                    break;
             }
+        }
+
+        private static void WriteSlotMachine(int[,] arr, bool showContent = false)
+        {
+            Console.WriteLine("╔═══════╗");
+            for (int x = 0; x < arr.GetLength(1); ++x)
+            {
+                Console.Write("║ ");
+                for (int y = 0; y < arr.GetLength(0); ++y)
+                    if (showContent)
+                        Console.Write($"{arr[x, y]} ");
+                    else
+                        Console.Write("? ");
+                Console.WriteLine("║");
+            }
+            Console.WriteLine("╚═══════╝");
+        }
+
+        private static void Spin(int[,] arr, Random random)
+        {
+            for (int x = 0; x < arr.GetLength(1); ++x)
+                for (int y = 0; y < arr.GetLength(0); ++y)
+                    arr[x, y] = random.Next(MIN, MAX);
         }
     }
 }
