@@ -19,9 +19,6 @@
          * then dumped into the player’s money total. As for the mechanism to determine what the wheels produce 
          * per spin, use a random number generating function.
          */
-        private const int MIN = 1;
-        private const int MAX = 9;
-
         static void Main(string[] args)
         {
             double balance = 500;
@@ -33,7 +30,7 @@
                 Console.Clear();
                 WriteHeader();
                 WriteSlotMachine(arr);
-                Spin(arr, random);
+                Logics.Spin(arr, random);
 
                 double bet = PlaceBet(balance);
                 if (bet < 0)
@@ -77,13 +74,6 @@
                 Console.WriteLine("║");
             }
             Console.WriteLine("╚═══════╝");
-        }
-
-        private static void Spin(int[,] arr, Random random)
-        {
-            for (int x = 0; x < arr.GetLength(1); ++x)
-                for (int y = 0; y < arr.GetLength(0); ++y)
-                    arr[x, y] = random.Next(MIN, MAX);
         }
 
         private static double PlaceBet(double balance)

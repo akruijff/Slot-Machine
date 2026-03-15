@@ -9,7 +9,17 @@
         private const int VERTICAL_CENTER = 1;
         private const int VERTICAL_RIGHT = 2;
 
+        private const int SPIN_VALUE_MIN = 1;
+        private const int SPIN_VALUE_MAX = 9;
+
         private const int WIN_FACTOR = 3;
+
+        internal static void Spin(int[,] arr, Random random)
+        {
+            for (int x = 0; x < arr.GetLength(1); ++x)
+                for (int y = 0; y < arr.GetLength(0); ++y)
+                    arr[x, y] = random.Next(SPIN_VALUE_MIN, SPIN_VALUE_MAX);
+        }
 
         internal static Won DetermineWinState(int[,] arr, Mode mode)
         {
