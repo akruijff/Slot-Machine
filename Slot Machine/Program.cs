@@ -162,13 +162,20 @@
 
         private static double WriteResult(int[,] arr, double bet, bool won, string line)
         {
-            if (won)
-            {
-                Console.WriteLine($"You won on the {line}!");
-                return bet * WIN_FACTOR;
-            }
-            Console.WriteLine($"You lost on the {line}.");
-            return 0;
+            double result = BetMultiplier(bet, won);
+            WriteResult(won, line);
+            return result;
+        }
+
+        private static void WriteResult(bool won, string line)
+        {
+            string s = won ? "won" : "lost";
+            Console.WriteLine($"You {s} on the {line}.");
+        }
+
+        private static double BetMultiplier(double bet, bool won)
+        {
+            return won ? bet * WIN_FACTOR : 0;
         }
 
         private static bool UserWantsToExit()
