@@ -19,13 +19,6 @@
          * then dumped into the player’s money total. As for the mechanism to determine what the wheels produce 
          * per spin, use a random number generating function.
          */
-        private const int HORIONTAL_TOP = 0;
-        private const int HORIONTAL_CENTER = 1;
-        private const int HORIONTAL_BOTTOM = 2;
-        private const int VERTICAL_LEFT = 0;
-        private const int VERTICAL_CENTER = 1;
-        private const int VERTICAL_RIGHT = 2;
-
         private const int MIN = 1;
         private const int MAX = 9;
 
@@ -134,48 +127,9 @@
         private static double CheckResult(int[,] arr, Mode mode, double balance, double bet)
         {
             Console.WriteLine();
-            Won won = DetermineWinState(arr, mode);
+            Won won = Logics.DetermineWinState(arr, mode);
             WriteResult(won);
             return balance + Logics.BetMultiplier(bet, won);
-        }
-
-        private static Won DetermineWinState(int[,] arr, Mode mode)
-        {
-            switch (mode)
-            {
-                case Mode.CenterLine:
-                    if (Logics.CheckRow(arr, HORIONTAL_CENTER))
-                        return Won.CenterLine;
-                    else
-                        return Won.DidntWin;
-                case Mode.HorizontalLines:
-                    if (Logics.CheckRow(arr, HORIONTAL_TOP))
-                        return Won.HorizontalTop;
-                    else if (Logics.CheckRow(arr, HORIONTAL_CENTER))
-                        return Won.HorizontalCenter;
-                    else if (Logics.CheckRow(arr, HORIONTAL_BOTTOM))
-                        return Won.HorizontalBottom;
-                    else
-                        return Won.DidntWin;
-                case Mode.VerticalLines:
-                    if (Logics.CheckColumn(arr, VERTICAL_LEFT))
-                        return Won.VerticalLinesLeft;
-                    else if (Logics.CheckColumn(arr, VERTICAL_CENTER))
-                        return Won.VerticalLinesCenter;
-                    else if (Logics.CheckColumn(arr, VERTICAL_RIGHT))
-                        return Won.VerticalLinesRight;
-                    else
-                        return Won.DidntWin;
-                case Mode.Diagonals:
-                    if (Logics.CheckMainDiagonal(arr))
-                        return Won.DiagonalsDiagonal;
-                    else if (Logics.CheckAntiDiagonal(arr))
-                        return Won.DiagonalsAnti;
-                    else
-                        return Won.DidntWin;
-                default:
-                    return Won.DidntWin;
-            }
         }
 
         private static void WriteResult(Won won)

@@ -2,7 +2,53 @@
 {
     internal class Logics
     {
+        private const int HORIONTAL_TOP = 0;
+        private const int HORIONTAL_CENTER = 1;
+        private const int HORIONTAL_BOTTOM = 2;
+        private const int VERTICAL_LEFT = 0;
+        private const int VERTICAL_CENTER = 1;
+        private const int VERTICAL_RIGHT = 2;
+
         private const int WIN_FACTOR = 3;
+
+        internal static Won DetermineWinState(int[,] arr, Mode mode)
+        {
+            switch (mode)
+            {
+                case Mode.CenterLine:
+                    if (Logics.CheckRow(arr, HORIONTAL_CENTER))
+                        return Won.CenterLine;
+                    else
+                        return Won.DidntWin;
+                case Mode.HorizontalLines:
+                    if (Logics.CheckRow(arr, HORIONTAL_TOP))
+                        return Won.HorizontalTop;
+                    else if (Logics.CheckRow(arr, HORIONTAL_CENTER))
+                        return Won.HorizontalCenter;
+                    else if (Logics.CheckRow(arr, HORIONTAL_BOTTOM))
+                        return Won.HorizontalBottom;
+                    else
+                        return Won.DidntWin;
+                case Mode.VerticalLines:
+                    if (Logics.CheckColumn(arr, VERTICAL_LEFT))
+                        return Won.VerticalLinesLeft;
+                    else if (Logics.CheckColumn(arr, VERTICAL_CENTER))
+                        return Won.VerticalLinesCenter;
+                    else if (Logics.CheckColumn(arr, VERTICAL_RIGHT))
+                        return Won.VerticalLinesRight;
+                    else
+                        return Won.DidntWin;
+                case Mode.Diagonals:
+                    if (Logics.CheckMainDiagonal(arr))
+                        return Won.DiagonalsDiagonal;
+                    else if (Logics.CheckAntiDiagonal(arr))
+                        return Won.DiagonalsAnti;
+                    else
+                        return Won.DidntWin;
+                default:
+                    return Won.DidntWin;
+            }
+        }
 
         internal static double BetMultiplier(double bet, Won won) => won switch
         {
