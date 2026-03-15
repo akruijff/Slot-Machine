@@ -4,6 +4,20 @@
     {
         private const int WIN_FACTOR = 3;
 
+        internal static double BetMultiplier(double bet, Won won) => won switch
+        {
+            Won.CenterLine => BetMultiplier(bet),
+            Won.HorizontalTop => BetMultiplier(bet / 3),
+            Won.HorizontalCenter => BetMultiplier(bet / 3),
+            Won.HorizontalBottom => BetMultiplier(bet / 3),
+            Won.VerticalLinesLeft => BetMultiplier(bet / 3),
+            Won.VerticalLinesCenter => BetMultiplier(bet / 3),
+            Won.VerticalLinesRight => BetMultiplier(bet / 3),
+            Won.DiagonalsDiagonal => BetMultiplier(bet / 2),
+            Won.DiagonalsAnti => BetMultiplier(bet / 2),
+            _ => 0,
+        };
+
         internal static double BetMultiplier(double bet) => bet * WIN_FACTOR;
 
         internal static bool CheckRow(int[,] arr, int row)
