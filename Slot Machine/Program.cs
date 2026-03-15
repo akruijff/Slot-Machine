@@ -140,21 +140,21 @@
             switch (mode)
             {
                 case Mode.CenterLine:
-                    balance += WriteResult(arr, bet, CheckRow(arr, HORIONTAL_CENTER), "center line");
+                    balance += WriteResult(arr, bet, Logics.CheckRow(arr, HORIONTAL_CENTER), "center line");
                     return balance;
                 case Mode.HorizontalLines:
-                    balance += WriteResult(arr, bet / 3, CheckRow(arr, HORIONTAL_TOP),    "   top horizontal line");
-                    balance += WriteResult(arr, bet / 3, CheckRow(arr, HORIONTAL_CENTER), "center horizontal line");
-                    balance += WriteResult(arr, bet / 3, CheckRow(arr, HORIONTAL_BOTTOM), "bottom horizontal line");
+                    balance += WriteResult(arr, bet / 3, Logics.CheckRow(arr, HORIONTAL_TOP),    "   top horizontal line");
+                    balance += WriteResult(arr, bet / 3, Logics.CheckRow(arr, HORIONTAL_CENTER), "center horizontal line");
+                    balance += WriteResult(arr, bet / 3, Logics.CheckRow(arr, HORIONTAL_BOTTOM), "bottom horizontal line");
                     return balance;
                 case Mode.VerticalLines:
-                    balance += WriteResult(arr, bet / 3, CheckColumn(arr, VERTICAL_LEFT),   "  left vertical line");
-                    balance += WriteResult(arr, bet / 3, CheckColumn(arr, VERTICAL_CENTER), "center vertical line");
-                    balance += WriteResult(arr, bet / 3, CheckColumn(arr, VERTICAL_RIGHT),  " right vertical line");
+                    balance += WriteResult(arr, bet / 3, Logics.CheckColumn(arr, VERTICAL_LEFT),   "  left vertical line");
+                    balance += WriteResult(arr, bet / 3, Logics.CheckColumn(arr, VERTICAL_CENTER), "center vertical line");
+                    balance += WriteResult(arr, bet / 3, Logics.CheckColumn(arr, VERTICAL_RIGHT),  " right vertical line");
                     return balance;
                 case Mode.Diagonals:
-                    balance += WriteResult(arr, bet / 2, CheckMainDiagonal(arr), "main diagonal line");
-                    balance += WriteResult(arr, bet / 2, CheckAntiDiagonal(arr), "anti diagonal line");
+                    balance += WriteResult(arr, bet / 2, Logics.CheckMainDiagonal(arr), "main diagonal line");
+                    balance += WriteResult(arr, bet / 2, Logics.CheckAntiDiagonal(arr), "anti diagonal line");
                     return balance;
             }
             return balance;
@@ -169,38 +169,6 @@
             }
             Console.WriteLine($"You lost on the {line}.");
             return 0;
-        }
-
-        private static bool CheckRow(int[,] arr, int row)
-        {
-            for (int y = 1; y < arr.GetLength(1); ++y)
-                if (arr[row, 0] != arr[row, y])
-                    return false;
-            return true;
-        }
-
-        private static bool CheckColumn(int[,] arr, int column)
-        {
-            for (int x = 1; x < arr.GetLength(1); ++x)
-                if (arr[0, column] != arr[x, column])
-                    return false;
-            return true;
-        }
-
-        private static bool CheckMainDiagonal(int[,] arr)
-        {
-            for (int i = 1; i < arr.GetLength(0); ++i)
-                if (arr[0, 0] != arr[i, i])
-                    return false;
-            return true;
-        }
-
-        private static bool CheckAntiDiagonal(int[,] arr)
-        {
-            for (int i = 1; i < arr.GetLength(0); ++i)
-                if (arr[0, arr.GetLength(0) - 1] != arr[i, arr.GetLength(0) - i - 1])
-                    return false;
-            return true;
         }
 
         private static bool UserWantsToExit()
