@@ -202,10 +202,10 @@
             switch (won)
             {
                 case Won.DidntWin:
-                    balance = 0;
+                    balance += 0;
                     break;
                 default:
-                    balance = Logics.BetMultiplier(bet, won);
+                    balance += Logics.BetMultiplier(bet, won);
                     break;
             }
             return balance;
