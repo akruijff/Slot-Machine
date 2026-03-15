@@ -199,16 +199,7 @@
                     WriteResult(false, "");
                     break;
             }
-            switch (won)
-            {
-                case Won.DidntWin:
-                    balance += 0;
-                    break;
-                default:
-                    balance += Logics.BetMultiplier(bet, won);
-                    break;
-            }
-            return balance;
+            return balance + Logics.BetMultiplier(bet, won);
         }
 
         private static void WriteResult(bool won, string line)
