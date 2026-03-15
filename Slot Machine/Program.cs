@@ -30,7 +30,6 @@
 
         private const int MIN = 1;
         private const int MAX = 9;
-        private const int WIN_FACTOR = 3;
 
         static void Main(string[] args)
         {
@@ -162,20 +161,14 @@
 
         private static double WriteResult(int[,] arr, double bet, bool won, string line)
         {
-            double result = BetMultiplier(bet, won);
             WriteResult(won, line);
-            return result;
+            return Logics.BetMultiplier(bet, won);
         }
 
         private static void WriteResult(bool won, string line)
         {
             string s = won ? "won" : "lost";
             Console.WriteLine($"You {s} on the {line}.");
-        }
-
-        private static double BetMultiplier(double bet, bool won)
-        {
-            return won ? bet * WIN_FACTOR : 0;
         }
 
         private static bool UserWantsToExit()
