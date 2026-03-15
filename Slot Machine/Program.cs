@@ -19,8 +19,6 @@
          * then dumped into the player’s money total. As for the mechanism to determine what the wheels produce 
          * per spin, use a random number generating function.
          */
-        enum Mode { CenterLine, HorizontalLines, VerticalLines, Diagonals, Unkown };
-
         private const int HORIONTAL_TOP = 0;
         private const int HORIONTAL_CENTER = 1;
         private const int HORIONTAL_BOTTOM = 2;
@@ -143,37 +141,41 @@
 
         private static Won DetermineWinState(int[,] arr, Mode mode)
         {
-            Won won = Won.DidntWin;
             switch (mode)
             {
                 case Mode.CenterLine:
                     if (Logics.CheckRow(arr, HORIONTAL_CENTER))
-                        won = Won.CenterLine;
-                    break;
+                        return Won.CenterLine;
+                    else
+                        return Won.DidntWin;
                 case Mode.HorizontalLines:
                     if (Logics.CheckRow(arr, HORIONTAL_TOP))
-                        won = Won.HorizontalTop;
+                        return Won.HorizontalTop;
                     else if (Logics.CheckRow(arr, HORIONTAL_CENTER))
-                        won = Won.HorizontalCenter;
+                        return Won.HorizontalCenter;
                     else if (Logics.CheckRow(arr, HORIONTAL_BOTTOM))
-                        won = Won.HorizontalBottom;
-                    break;
+                        return Won.HorizontalBottom;
+                    else
+                        return Won.DidntWin;
                 case Mode.VerticalLines:
                     if (Logics.CheckColumn(arr, VERTICAL_LEFT))
-                        won = Won.VerticalLinesLeft;
+                        return Won.VerticalLinesLeft;
                     else if (Logics.CheckColumn(arr, VERTICAL_CENTER))
-                        won = Won.VerticalLinesCenter;
+                        return Won.VerticalLinesCenter;
                     else if (Logics.CheckColumn(arr, VERTICAL_RIGHT))
-                        won = Won.VerticalLinesRight;
-                    break;
+                        return Won.VerticalLinesRight;
+                    else
+                        return Won.DidntWin;
                 case Mode.Diagonals:
                     if (Logics.CheckMainDiagonal(arr))
-                        won = Won.DiagonalsDiagonal;
+                        return Won.DiagonalsDiagonal;
                     else if (Logics.CheckAntiDiagonal(arr))
-                        won = Won.DiagonalsAnti;
-                    break;
+                        return Won.DiagonalsAnti;
+                    else
+                        return Won.DidntWin;
+                default:
+                    return Won.DidntWin;
             }
-            return won;
         }
 
         private static void WriteResult(Won won)
