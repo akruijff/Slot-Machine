@@ -27,7 +27,6 @@
 
             while (balance > 0)
             {
-                Console.Clear();
                 UI.WriteHeader();
                 UI.WriteSlotMachine(arr);
                 Logics.Spin(arr, random);
@@ -43,7 +42,6 @@
 
                 // ---------------------------------------------
 
-                Console.Clear();
                 UI.WriteHeader();
                 UI.WriteSlotMachine(arr, true);
 

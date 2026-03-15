@@ -4,6 +4,7 @@
     {
         internal static void WriteHeader()
         {
+            Console.Clear();
             Console.WriteLine("Welkom to Slot Machine");
             Console.WriteLine("");
         }
