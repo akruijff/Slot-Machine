@@ -166,6 +166,12 @@
                         won = Won.DiagonalsAnti;
                     break;
             }
+            WriteResult(won);
+            return balance + Logics.BetMultiplier(bet, won);
+        }
+
+        private static void WriteResult(Won won)
+        {
             switch (won)
             {
                 case Won.CenterLine:
@@ -199,7 +205,6 @@
                     WriteResult(false, "");
                     break;
             }
-            return balance + Logics.BetMultiplier(bet, won);
         }
 
         private static void WriteResult(bool won, string line)
