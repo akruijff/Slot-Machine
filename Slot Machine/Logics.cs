@@ -4,10 +4,7 @@
     {
         private const int WIN_FACTOR = 3;
 
-        internal static double BetMultiplier(double bet, bool won)
-        {
-            return won ? bet * WIN_FACTOR : 0;
-        }
+        internal static double BetMultiplier(double bet) => bet * WIN_FACTOR;
 
         internal static bool CheckRow(int[,] arr, int row)
         {

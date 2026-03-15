@@ -209,34 +209,34 @@
             switch (won)
             {
                 case Won.CenterLine:
-                    balance = Logics.BetMultiplier(bet, true);
+                    balance = Logics.BetMultiplier(bet);
                     break;
                 case Won.HorizontalTop:
-                    balance = Logics.BetMultiplier(bet / 3, true);
+                    balance = Logics.BetMultiplier(bet / 3);
                     break;
                 case Won.HorizontalCenter:
-                    balance = Logics.BetMultiplier(bet / 3, true);
+                    balance = Logics.BetMultiplier(bet / 3);
                     break;
                 case Won.HorizontalBottom:
-                    balance = Logics.BetMultiplier(bet / 3, true);
+                    balance = Logics.BetMultiplier(bet / 3);
                     break;
                 case Won.VerticalLinesLeft:
-                    balance = Logics.BetMultiplier(bet / 3, true);
+                    balance = Logics.BetMultiplier(bet / 3);
                     break;
                 case Won.VerticalLinesCenter:
-                    balance = Logics.BetMultiplier(bet / 3, true);
+                    balance = Logics.BetMultiplier(bet / 3);
                     break;
                 case Won.VerticalLinesRight:
-                    balance = Logics.BetMultiplier(bet / 3, true);
+                    balance = Logics.BetMultiplier(bet / 3);
                     break;
                 case Won.DiagonalsDiagonal:
-                    balance = Logics.BetMultiplier(bet / 2, true);
+                    balance = Logics.BetMultiplier(bet / 2);
                     break;
                 case Won.DiagonalsAnti:
-                    balance = Logics.BetMultiplier(bet / 2, true);
+                    balance = Logics.BetMultiplier(bet / 2);
                     break;
                 case Won.DidntWin:
-                    balance = Logics.BetMultiplier(bet / 2, false);
+                    balance = 0;
                     break;
             }
             return balance;
