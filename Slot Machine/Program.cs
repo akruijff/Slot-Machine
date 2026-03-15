@@ -136,6 +136,13 @@
         private static double CheckResult(int[,] arr, Mode mode, double balance, double bet)
         {
             Console.WriteLine();
+            Won won = DetermineWinState(arr, mode);
+            WriteResult(won);
+            return balance + Logics.BetMultiplier(bet, won);
+        }
+
+        private static Won DetermineWinState(int[,] arr, Mode mode)
+        {
             Won won = Won.DidntWin;
             switch (mode)
             {
@@ -166,8 +173,7 @@
                         won = Won.DiagonalsAnti;
                     break;
             }
-            WriteResult(won);
-            return balance + Logics.BetMultiplier(bet, won);
+            return won;
         }
 
         private static void WriteResult(Won won)
