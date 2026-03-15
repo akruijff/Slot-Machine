@@ -144,7 +144,7 @@
         {
             Console.WriteLine();
             Won won = Won.DidntWin;
-            switch(mode)
+            switch (mode)
             {
                 case Mode.CenterLine:
                     if (Logics.CheckRow(arr, HORIONTAL_CENTER))
@@ -208,39 +208,29 @@
             }
             switch (won)
             {
-                case Won.CenterLine:
-                    balance = Logics.BetMultiplier(bet);
-                    break;
-                case Won.HorizontalTop:
-                    balance = Logics.BetMultiplier(bet / 3);
-                    break;
-                case Won.HorizontalCenter:
-                    balance = Logics.BetMultiplier(bet / 3);
-                    break;
-                case Won.HorizontalBottom:
-                    balance = Logics.BetMultiplier(bet / 3);
-                    break;
-                case Won.VerticalLinesLeft:
-                    balance = Logics.BetMultiplier(bet / 3);
-                    break;
-                case Won.VerticalLinesCenter:
-                    balance = Logics.BetMultiplier(bet / 3);
-                    break;
-                case Won.VerticalLinesRight:
-                    balance = Logics.BetMultiplier(bet / 3);
-                    break;
-                case Won.DiagonalsDiagonal:
-                    balance = Logics.BetMultiplier(bet / 2);
-                    break;
-                case Won.DiagonalsAnti:
-                    balance = Logics.BetMultiplier(bet / 2);
-                    break;
                 case Won.DidntWin:
                     balance = 0;
+                    break;
+                default:
+                    balance = BetMultiplier(bet, won);
                     break;
             }
             return balance;
         }
+
+        private static double BetMultiplier(double bet, Won won) => won switch
+        {
+            Won.CenterLine => Logics.BetMultiplier(bet),
+            Won.HorizontalTop => Logics.BetMultiplier(bet / 3),
+            Won.HorizontalCenter => Logics.BetMultiplier(bet / 3),
+            Won.HorizontalBottom => Logics.BetMultiplier(bet / 3),
+            Won.VerticalLinesLeft => Logics.BetMultiplier(bet / 3),
+            Won.VerticalLinesCenter => Logics.BetMultiplier(bet / 3),
+            Won.VerticalLinesRight => Logics.BetMultiplier(bet / 3),
+            Won.DiagonalsDiagonal => Logics.BetMultiplier(bet / 2),
+            Won.DiagonalsAnti => Logics.BetMultiplier(bet / 2),
+            _ => 0,
+        };
 
         private static void WriteResult(bool won, string line)
         {
