@@ -144,7 +144,7 @@
                         WriteResult(won, "center line");
                         balance += Logics.BetMultiplier(bet, won);
                     }
-                    return balance;
+                    break;
                 case Mode.HorizontalLines:
                     {
                         bool won = Logics.CheckRow(arr, HORIONTAL_TOP);
@@ -161,7 +161,7 @@
                         WriteResult(won, "bottom horizontal line");
                         balance += Logics.BetMultiplier(bet / 3, won);
                     }
-                    return balance;
+                    break;
                 case Mode.VerticalLines:
                     {
                         bool won = Logics.CheckColumn(arr, VERTICAL_LEFT);
@@ -178,7 +178,7 @@
                         WriteResult(won, " right vertical line");
                         balance += Logics.BetMultiplier(bet / 3, won);
                     }
-                    return balance;
+                    break;
                 case Mode.Diagonals:
                     {
                         bool won = Logics.CheckMainDiagonal(arr);
@@ -190,7 +190,7 @@
                         WriteResult(won, "anti diagonal line");
                         balance += Logics.BetMultiplier(bet / 2, won);
                     }
-                    return balance;
+                    break;
             }
             return balance;
         }
