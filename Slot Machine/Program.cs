@@ -139,30 +139,60 @@
             switch (mode)
             {
                 case Mode.CenterLine:
-                    balance += WriteResult(arr, bet, Logics.CheckRow(arr, HORIONTAL_CENTER), "center line");
+                    {
+                        bool won = Logics.CheckRow(arr, HORIONTAL_CENTER);
+                        WriteResult(won, "center line");
+                        balance += Logics.BetMultiplier(bet, won);
+                    }
                     return balance;
                 case Mode.HorizontalLines:
-                    balance += WriteResult(arr, bet / 3, Logics.CheckRow(arr, HORIONTAL_TOP),    "   top horizontal line");
-                    balance += WriteResult(arr, bet / 3, Logics.CheckRow(arr, HORIONTAL_CENTER), "center horizontal line");
-                    balance += WriteResult(arr, bet / 3, Logics.CheckRow(arr, HORIONTAL_BOTTOM), "bottom horizontal line");
+                    {
+                        bool won = Logics.CheckRow(arr, HORIONTAL_TOP);
+                        WriteResult(won, "   top horizontal line");
+                        balance += Logics.BetMultiplier(bet / 3, won);
+                    }
+                    {
+                        bool won = Logics.CheckRow(arr, HORIONTAL_CENTER);
+                        WriteResult(won, "center horizontal line");
+                        balance += Logics.BetMultiplier(bet / 3, won);
+                    }
+                    {
+                        bool won = Logics.CheckRow(arr, HORIONTAL_BOTTOM);
+                        WriteResult(won, "bottom horizontal line");
+                        balance += Logics.BetMultiplier(bet / 3, won);
+                    }
                     return balance;
                 case Mode.VerticalLines:
-                    balance += WriteResult(arr, bet / 3, Logics.CheckColumn(arr, VERTICAL_LEFT),   "  left vertical line");
-                    balance += WriteResult(arr, bet / 3, Logics.CheckColumn(arr, VERTICAL_CENTER), "center vertical line");
-                    balance += WriteResult(arr, bet / 3, Logics.CheckColumn(arr, VERTICAL_RIGHT),  " right vertical line");
+                    {
+                        bool won = Logics.CheckColumn(arr, VERTICAL_LEFT);
+                        WriteResult(won, "  left vertical line");
+                        balance += Logics.BetMultiplier(bet / 3, won);
+                    }
+                    {
+                        bool won = Logics.CheckColumn(arr, VERTICAL_LEFT);
+                        WriteResult(won, "center vertical line");
+                        balance += Logics.BetMultiplier(bet / 3, won);
+                    }
+                    {
+                        bool won = Logics.CheckColumn(arr, VERTICAL_LEFT);
+                        WriteResult(won, " right vertical line");
+                        balance += Logics.BetMultiplier(bet / 3, won);
+                    }
                     return balance;
                 case Mode.Diagonals:
-                    balance += WriteResult(arr, bet / 2, Logics.CheckMainDiagonal(arr), "main diagonal line");
-                    balance += WriteResult(arr, bet / 2, Logics.CheckAntiDiagonal(arr), "anti diagonal line");
+                    {
+                        bool won = Logics.CheckMainDiagonal(arr);
+                        WriteResult(won, "main diagonal line");
+                        balance += Logics.BetMultiplier(bet / 2, won);
+                    }
+                    {
+                        bool won = Logics.CheckAntiDiagonal(arr);
+                        WriteResult(won, "anti diagonal line");
+                        balance += Logics.BetMultiplier(bet / 2, won);
+                    }
                     return balance;
             }
             return balance;
-        }
-
-        private static double WriteResult(int[,] arr, double bet, bool won, string line)
-        {
-            WriteResult(won, line);
-            return Logics.BetMultiplier(bet, won);
         }
 
         private static void WriteResult(bool won, string line)
