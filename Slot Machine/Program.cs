@@ -20,13 +20,6 @@
          * per spin, use a random number generating function.
          */
         enum Mode { CenterLine, HorizontalLines, VerticalLines, Diagonals, Unkown };
-        enum Won { 
-            CenterLine,
-            HorizontalTop, HorizontalCenter, HorizontalBottom,
-            VerticalLinesLeft, VerticalLinesCenter, VerticalLinesRight,
-            DiagonalsDiagonal, DiagonalsAnti,
-            DidntWin,
-        };
 
         private const int HORIONTAL_TOP = 0;
         private const int HORIONTAL_CENTER = 1;
