@@ -20,6 +20,13 @@
          * per spin, use a random number generating function.
          */
         enum Mode { CenterLine, HorizontalLines, VerticalLines, Diagonals, Unkown };
+        enum Won { 
+            CenterLine,
+            HorizontalTop, HorizontalCenter, HorizontalBottom,
+            VerticalLinesLeft, VerticalLinesCenter, VerticalLinesRight,
+            DiagonalsDiagonal, DiagonalsAnti,
+            DidntWin,
+        };
 
         private const int HORIONTAL_TOP = 0;
         private const int HORIONTAL_CENTER = 1;
@@ -136,60 +143,100 @@
         private static double CheckResult(int[,] arr, Mode mode, double balance, double bet)
         {
             Console.WriteLine();
-            switch (mode)
+            Won won = Won.DidntWin;
+            switch(mode)
             {
                 case Mode.CenterLine:
-                    {
-                        bool won = Logics.CheckRow(arr, HORIONTAL_CENTER);
-                        WriteResult(won, "center line");
-                        balance += Logics.BetMultiplier(bet, won);
-                    }
+                    if (Logics.CheckRow(arr, HORIONTAL_CENTER))
+                        won = Won.CenterLine;
                     break;
                 case Mode.HorizontalLines:
-                    {
-                        bool won = Logics.CheckRow(arr, HORIONTAL_TOP);
-                        WriteResult(won, "   top horizontal line");
-                        balance += Logics.BetMultiplier(bet / 3, won);
-                    }
-                    {
-                        bool won = Logics.CheckRow(arr, HORIONTAL_CENTER);
-                        WriteResult(won, "center horizontal line");
-                        balance += Logics.BetMultiplier(bet / 3, won);
-                    }
-                    {
-                        bool won = Logics.CheckRow(arr, HORIONTAL_BOTTOM);
-                        WriteResult(won, "bottom horizontal line");
-                        balance += Logics.BetMultiplier(bet / 3, won);
-                    }
+                    if (Logics.CheckRow(arr, HORIONTAL_TOP))
+                        won = Won.HorizontalTop;
+                    else if (Logics.CheckRow(arr, HORIONTAL_CENTER))
+                        won = Won.HorizontalCenter;
+                    else if (Logics.CheckRow(arr, HORIONTAL_BOTTOM))
+                        won = Won.HorizontalBottom;
                     break;
                 case Mode.VerticalLines:
-                    {
-                        bool won = Logics.CheckColumn(arr, VERTICAL_LEFT);
-                        WriteResult(won, "  left vertical line");
-                        balance += Logics.BetMultiplier(bet / 3, won);
-                    }
-                    {
-                        bool won = Logics.CheckColumn(arr, VERTICAL_LEFT);
-                        WriteResult(won, "center vertical line");
-                        balance += Logics.BetMultiplier(bet / 3, won);
-                    }
-                    {
-                        bool won = Logics.CheckColumn(arr, VERTICAL_LEFT);
-                        WriteResult(won, " right vertical line");
-                        balance += Logics.BetMultiplier(bet / 3, won);
-                    }
+                    if (Logics.CheckColumn(arr, VERTICAL_LEFT))
+                        won = Won.VerticalLinesLeft;
+                    else if (Logics.CheckColumn(arr, VERTICAL_CENTER))
+                        won = Won.VerticalLinesCenter;
+                    else if (Logics.CheckColumn(arr, VERTICAL_RIGHT))
+                        won = Won.VerticalLinesRight;
                     break;
                 case Mode.Diagonals:
-                    {
-                        bool won = Logics.CheckMainDiagonal(arr);
-                        WriteResult(won, "main diagonal line");
-                        balance += Logics.BetMultiplier(bet / 2, won);
-                    }
-                    {
-                        bool won = Logics.CheckAntiDiagonal(arr);
-                        WriteResult(won, "anti diagonal line");
-                        balance += Logics.BetMultiplier(bet / 2, won);
-                    }
+                    if (Logics.CheckMainDiagonal(arr))
+                        won = Won.DiagonalsDiagonal;
+                    else if (Logics.CheckAntiDiagonal(arr))
+                        won = Won.DiagonalsAnti;
+                    break;
+            }
+            switch (won)
+            {
+                case Won.CenterLine:
+                    WriteResult(true, "center line");
+                    break;
+                case Won.HorizontalTop:
+                    WriteResult(true, "   top horizontal line");
+                    break;
+                case Won.HorizontalCenter:
+                    WriteResult(true, "center horizontal line");
+                    break;
+                case Won.HorizontalBottom:
+                    WriteResult(true, "bottom horizontal line");
+                    break;
+                case Won.VerticalLinesLeft:
+                    WriteResult(true, "  left vertical line");
+                    break;
+                case Won.VerticalLinesCenter:
+                    WriteResult(true, "center vertical line");
+                    break;
+                case Won.VerticalLinesRight:
+                    WriteResult(true, " right vertical line");
+                    break;
+                case Won.DiagonalsDiagonal:
+                    WriteResult(true, "main diagonal line");
+                    break;
+                case Won.DiagonalsAnti:
+                    WriteResult(true, "anti diagonal line");
+                    break;
+                case Won.DidntWin:
+                    WriteResult(false, "");
+                    break;
+            }
+            switch (won)
+            {
+                case Won.CenterLine:
+                    balance = Logics.BetMultiplier(bet, true);
+                    break;
+                case Won.HorizontalTop:
+                    balance = Logics.BetMultiplier(bet / 3, true);
+                    break;
+                case Won.HorizontalCenter:
+                    balance = Logics.BetMultiplier(bet / 3, true);
+                    break;
+                case Won.HorizontalBottom:
+                    balance = Logics.BetMultiplier(bet / 3, true);
+                    break;
+                case Won.VerticalLinesLeft:
+                    balance = Logics.BetMultiplier(bet / 3, true);
+                    break;
+                case Won.VerticalLinesCenter:
+                    balance = Logics.BetMultiplier(bet / 3, true);
+                    break;
+                case Won.VerticalLinesRight:
+                    balance = Logics.BetMultiplier(bet / 3, true);
+                    break;
+                case Won.DiagonalsDiagonal:
+                    balance = Logics.BetMultiplier(bet / 2, true);
+                    break;
+                case Won.DiagonalsAnti:
+                    balance = Logics.BetMultiplier(bet / 2, true);
+                    break;
+                case Won.DidntWin:
+                    balance = Logics.BetMultiplier(bet / 2, false);
                     break;
             }
             return balance;
